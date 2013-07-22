@@ -100,6 +100,7 @@ void GLWidget::paintEvent(QPaintEvent*)
 void GLWidget::showFPS(QPainter& painter)
 {
   int ms = _renderTime.elapsed();
+  _renderTime.restart();
   _fpsAvarage.add(ms);
   QString text("fps: ");
   text+= QString::number( int(1000.0/_fpsAvarage.getAvarage()) );
@@ -115,8 +116,6 @@ void GLWidget::showFPS(QPainter& painter)
   painter.fillRect(QRect(0, 0, rect.width()+ 2*border, rect.height() + 2*border), QColor(0, 0, 0, 127));
   painter.drawText(border, border, rect.width(), rect.height(),
                     Qt::AlignCenter | Qt::TextWordWrap, text);
-
-  _renderTime.restart();
 }
 
 void GLWidget::showGL()
