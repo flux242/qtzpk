@@ -16,8 +16,7 @@ public:
   Point3D(const float *xx) : x(*xx), y( *(xx+1) ), z(*(xx+2)) {}
   float x,y,z;
 private:
-  // assignment is not allowed at the moment
-  Point3D& operator=(const Point3D &);
+  // Point3D& operator=(const Point3D &);
 };
 
 extern int getNumberOfPointsForIteration(int iteration);
