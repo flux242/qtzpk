@@ -13,25 +13,30 @@
 class RunningAverage
 {
 public:
-    RunningAverage(int size) : _vector(size), _size(size) {}
+    RunningAverage(int size) : _vector(), _size(size), _summ(0.0) {}
     ~RunningAverage() {}
 
     void add(int value)
     {
-        if (_vector.size()>=_size) _vector.pop_back();
+        while (_vector.size()<_size)
+        {
+           // initialization
+          _vector.push_front(value);
+          _summ+=float(value)/_size;
+        }
+
+        _summ+=(float(value)/_size - float(_vector.last())/_size);
+        _vector.pop_back();
         _vector.push_front(value);
     }
     int getAverage()
     {
-        int summ = 0;
-        for (int i = 0; i < _vector.size(); ++i)
-          summ+=_vector.at(i);
-
-        return int(summ/_vector.size());
+      return int(_summ);
     }
 private:
     QVector<int> _vector;
     int _size;
+    float _summ;
 };
 
 
