@@ -30,7 +30,7 @@ GLWidget::GLWidget( QWidget* parent )
       _fogDistance(3.0),
       _doClearBackground(true),
       _isDepthTestDisabled(false),
-      _fpsAvarage(10)
+      _fpsAverage(10)
 {
     // Core profile doesn't work with QPainter!!
 
@@ -101,9 +101,9 @@ void GLWidget::showFPS(QPainter& painter)
 {
   int ms = _renderTime.elapsed();
   _renderTime.restart();
-  _fpsAvarage.add(ms);
+  _fpsAverage.add(ms);
   QString text("fps: ");
-  text+= QString::number( int(1000.0/_fpsAvarage.getAvarage()) );
+  text+= QString::number( int(1000.0/_fpsAverage.getAverage()) );
 
   QFontMetrics metrics = QFontMetrics(font());
   int border = qMax(2, metrics.leading());

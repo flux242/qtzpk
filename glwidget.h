@@ -10,18 +10,18 @@
 /*
  * @brief This class is used to smooth shown fps
  */
-class RunningAvarage
+class RunningAverage
 {
 public:
-    RunningAvarage(int size) : _vector(size), _size(size) {}
-    ~RunningAvarage() {}
+    RunningAverage(int size) : _vector(size), _size(size) {}
+    ~RunningAverage() {}
 
     void add(int value)
     {
         if (_vector.size()>=_size) _vector.pop_back();
         _vector.push_front(value);
     }
-    int getAvarage()
+    int getAverage()
     {
         int summ = 0;
         for (int i = 0; i < _vector.size(); ++i)
@@ -89,7 +89,7 @@ private:
     float _fogDistance;
     bool _doClearBackground;
     bool _isDepthTestDisabled;
-    RunningAvarage _fpsAvarage;
+    RunningAverage _fpsAverage;
 };
 
 #endif // GLWIDGET_H
