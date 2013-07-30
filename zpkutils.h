@@ -6,6 +6,11 @@
 
 namespace zpk
 {
+enum Dim
+{
+  D2D,
+  D3D
+};
 
 class Point3D
 {
@@ -19,8 +24,8 @@ private:
   // Point3D& operator=(const Point3D &);
 };
 
-extern int getNumberOfPointsForIteration(int iteration);
-extern std::auto_ptr<std::vector<zpk::Point3D> > getUnityCube(int iteration);
+extern int getNumberOfPointsForIteration(int iteration, Dim);
+extern std::auto_ptr<std::vector<zpk::Point3D> > getUnityCube(int iteration, Dim);
 
 } // end of zpk namespace
 

@@ -7,6 +7,7 @@
 #include <QOpenGLShaderProgram>
 #include <QTime>
 
+#include "zpkutils.h"
 /*
  * @brief This class is used to smooth shown fps
  */
@@ -54,6 +55,8 @@ public slots:
     void setBchannel(int);
     void setClearBackground(bool);
     void setDisableDepthTest(bool);
+    void setDimension(QString);
+    void resetRotationMatrix();
     void animate();
 protected:
     virtual void initializeGL();
@@ -82,6 +85,7 @@ private:
     QColor     _color;
     QTime      _renderTime;
     int _iteration;
+    zpk::Dim _dim;
     bool _isBufferAllocated;
     int _xPressedPos;
     int _yPressedPos;

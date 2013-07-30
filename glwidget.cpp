@@ -3,7 +3,6 @@
 #include <QCoreApplication>
 #include <QKeyEvent>
 
-#include "zpkutils.h"
 
 typedef void (*PglGenVertexArrays) (GLsizei n,  GLuint *arrays);
 typedef void (*PglBindVertexArray) (GLuint array);
@@ -18,6 +17,7 @@ GLWidget::GLWidget( QWidget* parent )
       _color(),
       _renderTime(),
       _iteration(5),
+      _dim(zpk::D3D),
       _isBufferAllocated(false),
       _xPressedPos(0),
       _yPressedPos(0),
@@ -149,10 +149,10 @@ void GLWidget::showGL()
 
     if (!_isBufferAllocated)
     {
-       std::auto_ptr<std::vector<zpk::Point3D> > points(zpk::getUnityCube(_iteration));
+       std::auto_ptr<std::vector<zpk::Point3D> > points(zpk::getUnityCube(_iteration, _dim));
        _vertexBuffer.allocate( &(*points)[0], points->size() * sizeof(zpk::Point3D) );
        _isBufferAllocated = true;
-       _showPoints = zpk::getNumberOfPointsForIteration(_iteration);
+       _showPoints = zpk::getNumberOfPointsForIteration(_iteration, _dim);
     }
 
     // Set the clear color to black
@@ -183,7 +183,7 @@ void GLWidget::showGL()
     _shader.setUniformValue( "fog_end", _fogDistance );
     _shader.setUniformValue( "model_color", _color );
 
-    if (_showPoints < zpk::getNumberOfPointsForIteration(_iteration))
+    if (_showPoints < zpk::getNumberOfPointsForIteration(_iteration, _dim))
       ++_showPoints;
     glDrawArrays( GL_LINE_STRIP, 0, _showPoints );
 
@@ -228,6 +228,28 @@ void GLWidget::setClearBackground(bool clearbg)
 void GLWidget::setDisableDepthTest(bool disableDepth)
 {
   _isDepthTestDisabled = disableDepth;
+}
+
+void GLWidget::setDimension(QString d)
+{
+  zpk::Dim newDim;
+  if ("3D"==d)
+    newDim = zpk::D3D;
+  else
+    newDim = zpk::D2D;
+
+  if (_dim==newDim)
+     return;
+  else
+    _dim = newDim;
+
+  _isBufferAllocated = false;
+}
+
+void GLWidget::resetRotationMatrix()
+{
+  _rotationMatrix.setToIdentity();
+  _deltaX = _deltaY = 0;
 }
 
 void GLWidget::animate()
