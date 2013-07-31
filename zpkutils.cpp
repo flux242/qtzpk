@@ -2,204 +2,201 @@
 
 namespace zpk {
 
-static int  vert, X, Y, Z;
-
-
 /*
  * @brief local function
  *
  */
-void zpk2D(std::vector<zpk::Point3D> & ZPK, unsigned m, unsigned ban, int xsign, int ysign)
+void zpk2D(zpk::Point3D*& zpkarr, unsigned m, unsigned ban, Point3D& p, int xsign, int ysign)
 {
   switch(ban)
   {
   case 1:
-    if (m>2) zpk2D(ZPK, m/2,2, xsign, ysign);
-    ZPK[vert].x = float(X); ZPK[vert++].y = float(Y);
-    Y+=ysign; 
-    if (m>2) zpk2D(ZPK, m/2,1, xsign, ysign);
-    ZPK[vert].x = float(X); ZPK[vert++].y = float(Y);
-    X+=xsign; 
-    if (m>2) zpk2D(ZPK, m/2,1, xsign, ysign);
-    ZPK[vert].x = float(X); ZPK[vert++].y = float(Y);
-    Y-=ysign; 
-    if (m>2) zpk2D(ZPK, m/2,2, -xsign, -ysign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y);
+    if (m>2) zpk2D(zpkarr, m/2,2, p, xsign, ysign);
+    zpkarr->x = p.x; zpkarr->y = p.y; ++zpkarr;
+    p.y+=ysign; 
+    if (m>2) zpk2D(zpkarr, m/2,1, p, xsign, ysign);
+    zpkarr->x = p.x; zpkarr->y = p.y; ++zpkarr;
+    p.x+=xsign; 
+    if (m>2) zpk2D(zpkarr, m/2,1, p, xsign, ysign);
+    zpkarr->x = p.x; zpkarr->y = p.y; ++zpkarr;
+    p.y-=ysign; 
+    if (m>2) zpk2D(zpkarr, m/2,2, p, -xsign, -ysign);
+    zpkarr->x = p.x; zpkarr->y = p.y;
     break;
   case 2:
-    if (m>2) zpk2D(ZPK, m/2,1, xsign, ysign);
-    ZPK[vert].x = float(X); ZPK[vert++].y = float(Y);
-    X+=xsign; 
-    if (m>2) zpk2D(ZPK, m/2,2, xsign, ysign);
-    ZPK[vert].x = float(X); ZPK[vert++].y = float(Y);
-    Y+=ysign; 
-    if (m>2) zpk2D(ZPK, m/2,2, xsign, ysign);
-    ZPK[vert].x = float(X); ZPK[vert++].y = float(Y);
-    X-=xsign; 
-    if (m>2) zpk2D(ZPK, m/2,1, -xsign, -ysign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y);
+    if (m>2) zpk2D(zpkarr, m/2,1, p, xsign, ysign);
+    zpkarr->x = p.x; zpkarr->y = p.y; ++zpkarr;
+    p.x+=xsign; 
+    if (m>2) zpk2D(zpkarr, m/2,2, p, xsign, ysign);
+    zpkarr->x = p.x; zpkarr->y = p.y; ++zpkarr;
+    p.y+=ysign; 
+    if (m>2) zpk2D(zpkarr, m/2,2, p, xsign, ysign);
+    zpkarr->x = p.x; zpkarr->y = p.y; ++zpkarr;
+    p.x-=xsign; 
+    if (m>2) zpk2D(zpkarr, m/2,1, p, -xsign, -ysign);
+    zpkarr->x = p.x; zpkarr->y = p.y;
     break;
   }
 }
 
-void zpk3D(std::vector<zpk::Point3D> & ZPK, unsigned m, unsigned ban, int xsign, int ysign, int zsign)
+void zpk3D(zpk::Point3D*& zpkarr, unsigned m, unsigned ban, Point3D& p, int xsign, int ysign, int zsign)
 {
   switch(ban)
   {
    case 1:
-    if (m>2) zpk3D(ZPK, m/2,6, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z+=zsign;
-    if (m>2) zpk3D(ZPK, m/2,3, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X+=xsign;
-    if (m>2) zpk3D(ZPK, m/2,3, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z-=zsign;
-    if (m>2) zpk3D(ZPK, m/2,5, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y+=ysign;
-    if (m>2) zpk3D(ZPK, m/2,5, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z+=zsign;
-    if (m>2) zpk3D(ZPK, m/2,3, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X-=xsign;
-    if (m>2) zpk3D(ZPK, m/2,3, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z-=zsign;
-    if (m>2) zpk3D(ZPK, m/2,6, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert].z = float(Z);
+    if (m>2) zpk3D(zpkarr, m/2,6, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z+=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,3, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x+=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,3, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z-=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,5, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y+=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,5, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z+=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,3, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x-=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,3, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z-=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,6, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z;
     break;
 
    case 2:
-    if (m>2) zpk3D(ZPK, m/2,5, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y+=ysign;
-    if (m>2) zpk3D(ZPK, m/2,4, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X+=xsign;
-    if (m>2) zpk3D(ZPK, m/2,4, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y-=ysign;
-    if (m>2) zpk3D(ZPK, m/2,6, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z+=zsign;
-    if (m>2) zpk3D(ZPK, m/2,6, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y+=ysign;
-    if (m>2) zpk3D(ZPK, m/2,4, xsign, -ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X-=xsign;
-    if (m>2) zpk3D(ZPK, m/2,4, xsign, -ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y-=ysign;
-    if (m>2) zpk3D(ZPK, m/2,5, xsign, -ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert].z = float(Z);
+    if (m>2) zpk3D(zpkarr, m/2,5, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y+=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,4, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x+=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,4, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y-=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,6, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z+=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,6, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y+=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,4, p, xsign, -ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x-=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,4, p, xsign, -ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y-=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,5, p, xsign, -ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z;
     break;
 
    case 3:
-    if (m>2) zpk3D(ZPK, m/2,1, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y+=ysign;
-    if (m>2) zpk3D(ZPK, m/2,6, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z+=zsign;
-    if (m>2) zpk3D(ZPK, m/2,6, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y-=ysign;
-    if (m>2) zpk3D(ZPK, m/2,4, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X+=xsign;
-    if (m>2) zpk3D(ZPK, m/2,4, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y+=ysign;
-    if (m>2) zpk3D(ZPK, m/2,6, xsign, -ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z-=zsign;
-    if (m>2) zpk3D(ZPK, m/2,6, xsign, -ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y-=ysign;
-    if (m>2) zpk3D(ZPK, m/2,1, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert].z = float(Z);
+    if (m>2) zpk3D(zpkarr, m/2,1, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y+=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,6, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z+=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,6, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y-=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,4, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x+=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,4, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y+=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,6, p, xsign, -ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z-=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,6, p, xsign, -ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y-=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,1, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z;
     break;
 
    case 4:
-    if (m>2) zpk3D(ZPK, m/2,2, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z+=zsign;
-    if (m>2) zpk3D(ZPK, m/2,5, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y-=ysign;
-    if (m>2) zpk3D(ZPK, m/2,5, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z-=zsign;
-    if (m>2) zpk3D(ZPK, m/2,3, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X-=xsign;
-    if (m>2) zpk3D(ZPK, m/2,3, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z+=zsign;
-    if (m>2) zpk3D(ZPK, m/2,5, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y+=ysign;
-    if (m>2) zpk3D(ZPK, m/2,5, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z-=zsign;
-    if (m>2) zpk3D(ZPK, m/2,2, xsign, -ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert].z = float(Z);
+    if (m>2) zpk3D(zpkarr, m/2,2, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z+=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,5, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y-=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,5, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z-=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,3, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x-=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,3, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z+=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,5, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y+=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,5, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z-=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,2, p, xsign, -ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z;
     break;
 
    case 5:
-    if (m>2) zpk3D(ZPK, m/2,4, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X+=xsign;
-    if (m>2) zpk3D(ZPK, m/2,2, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z+=zsign;
-    if (m>2) zpk3D(ZPK, m/2,2, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X-=xsign;
-    if (m>2) zpk3D(ZPK, m/2,1, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y+=ysign;
-    if (m>2) zpk3D(ZPK, m/2,1, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X+=xsign;
-    if (m>2) zpk3D(ZPK, m/2,2, xsign, -ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z-=zsign;
-    if (m>2) zpk3D(ZPK, m/2,2, xsign, -ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X-=xsign;
-    if (m>2) zpk3D(ZPK, m/2,4, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert].z = float(Z);
+    if (m>2) zpk3D(zpkarr, m/2,4, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x+=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,2, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z+=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,2, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x-=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,1, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y+=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,1, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x+=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,2, p, xsign, -ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z-=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,2, p, xsign, -ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x-=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,4, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z;
     break;
 
    case 6:
-    if (m>2) zpk3D(ZPK, m/2,3, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X-=xsign;
-    if (m>2) zpk3D(ZPK, m/2,1, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y-=ysign;
-    if (m>2) zpk3D(ZPK, m/2,1, -xsign, -ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X+=xsign;
-    if (m>2) zpk3D(ZPK, m/2,2, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Z+=zsign;
-    if (m>2) zpk3D(ZPK, m/2,2, xsign, ysign, zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X-=xsign;
-    if (m>2) zpk3D(ZPK, m/2,1, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    Y+=ysign;
-    if (m>2) zpk3D(ZPK, m/2,1, -xsign, ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert++].z = float(Z);
-    X+=xsign;
-    if (m>2) zpk3D(ZPK, m/2,3, xsign, -ysign, -zsign);
-    ZPK[vert].x = float(X); ZPK[vert].y = float(Y); ZPK[vert].z = float(Z);
+    if (m>2) zpk3D(zpkarr, m/2,3, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x-=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,1, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y-=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,1, p, -xsign, -ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x+=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,2, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.z+=zsign;
+    if (m>2) zpk3D(zpkarr, m/2,2, p, xsign, ysign, zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x-=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,1, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.y+=ysign;
+    if (m>2) zpk3D(zpkarr, m/2,1, p, -xsign, ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z; ++zpkarr;
+    p.x+=xsign;
+    if (m>2) zpk3D(zpkarr, m/2,3, p, xsign, -ysign, -zsign);
+    zpkarr->x = p.x; zpkarr->y = p.y; zpkarr->z = p.z;
     break;
 
    default: break;
@@ -208,13 +205,15 @@ void zpk3D(std::vector<zpk::Point3D> & ZPK, unsigned m, unsigned ban, int xsign,
 
 void zpk(std::vector<zpk::Point3D> & zpk, Dim d, unsigned m, unsigned ban, int xsign, int ysign, int zsign)
 {
+  Point3D p(0.0, 0.0, 0.0);
+  Point3D* zpkarr = &zpk[0];
   if (zpk::D2D==d)
-    zpk2D(zpk, m, ban, xsign, ysign);
+    zpk2D(zpkarr, m, ban, p, xsign, ysign);
   else
-    zpk3D(zpk, m, ban, xsign, ysign, zsign);
+    zpk3D(zpkarr, m, ban, p, xsign, ysign, zsign);
 }
 
-
+// interface functions
 int getNumberOfPointsForIteration(int iteration, Dim d)
 {
   if (D2D==d)
@@ -235,7 +234,6 @@ std::auto_ptr<std::vector<Point3D> > getUnityCube(int iteration, Dim d)
   if (0==points)
     return std::auto_ptr<std::vector<Point3D> >(0);
 
-  vert = 0; X=Y=Z=0;
   zpk(*points, d, N, 1, 1,1,1);
 
   for (std::vector<Point3D>::iterator it=points->begin(),itend=points->end(); it!=itend; ++it)
